@@ -17,10 +17,16 @@ func (r *Robot) Forward {
 func (r Robot) Position() (x, y int) {
     return r.posX, r.posY
 }
+func (r *Robot) Forward() {
 }
 
 func (r *Robot) TurnLeft() {
 }
 
 func (r *Robot) TurnRight() {
+}
+
+func (r Robot) OnScentedCell() bool {
+    x, y := r.Position()
+    return r.world.HasScent(x, y)
 }

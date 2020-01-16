@@ -54,7 +54,11 @@ func (r *Robot) Forward() (bool, bool) {
     r.posX = r.posX + dx
     r.posY = r.posY + dy
 
-    return false, false
+    if r.posX < 0 || r.posY < 0 || r.posX >= r.world.BoundX || r.posY >= r.world.BoundY {
+        // All robots get lost for now
+        lost = true
+    }
+
     return lost, ignored
 }
 

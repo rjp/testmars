@@ -90,4 +90,34 @@ func TestNewRobot(t *testing.T) {
     if px != 1 || py != 0 {
         t.Fatalf("1,1 S + F should be 1,0")
     }
+
+    // We're about to step off the map.
+    // Since we're the only robot, this should report 'LOST'
+    lost, ignored = r.Forward()
+    if !lost || ignored {
+        t.Fatalf("Robot should be lost and command not ignored")
+    }
+}
+
+// Clunky version of the first sample robot.
+// We'll clean this up in a minute.
+func TestSampleData(t *testing.T) {
+    w := NewWorld(5, 3)
+    r := NewRobot(1, 1, "E", w)
+    r.TurnRight()
+    r.Forward()
+    r.TurnRight()
+    r.Forward()
+    r.TurnRight()
+    r.Forward()
+    r.TurnRight()
+    r.Forward()
+
+    px, py := r.Position()
+    d := r.Direction()
+
+    // Output should be "1 1 E"
+    if px != 1 || py != 1 || d != "E" {
+        t.Fatalf("First robot failed to provide '1 1 E'")
+    }
 }

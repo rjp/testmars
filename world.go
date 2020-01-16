@@ -26,3 +26,7 @@ func NewWorld(x, y int) World {
     }
     return temp
 }
+
+func (w World) HasScent(x, y int) bool {
+    return w.Grid[y][x]
+}

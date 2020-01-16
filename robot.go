@@ -135,3 +135,7 @@ func (r *Robot) Commands(c string) bool {
     // Single return at the end can be cleaner code.
     return lost
 }
+
+func (r Robot) Report() string {
+    return fmt.Sprintf("%d %d %s", r.posX, r.posY, r.orientation)
+}

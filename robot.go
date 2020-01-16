@@ -55,10 +55,36 @@ func (r *Robot) Forward() (bool, bool) {
     return false, false
 }
 
+// This is clunky but we're writing simple code.
+// A lookup table or matrix would be 'better'.
+// Another approach would be to treat orientation
+// as an `int mod 4`, then `TurnLeft` is simply `o-1`
+// and `TurnRight` is `o+1`.
 func (r *Robot) TurnLeft() {
+    switch r.orientation {
+    case "N":
+        r.orientation = "W"
+    case "E":
+        r.orientation = "N"
+    case "S":
+        r.orientation = "E"
+    case "W":
+        r.orientation = "S"
+    }
 }
 
+// Rather than do the `switch` again, we'll cheat
+// and turn left three times.
 func (r *Robot) TurnRight() {
+    r.TurnLeft()
+    r.TurnLeft()
+    r.TurnLeft()
+}
+
+// `Direction` is shorter and easier to parse for
+// people than `orientation`.
+func (r Robot) Direction() string {
+    return r.orientation
 }
 
 func (r Robot) OnScentedCell() bool {

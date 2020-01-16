@@ -31,5 +31,20 @@ func TestNewRobot(t *testing.T) {
     if px != 1 || py != 2 {
         t.Fatalf("Move North")
     }
+
+    r.TurnLeft()
+
+    if r.Direction() != "W" {
+        t.Fatalf("N+L should be W")
+    }
+
+    r.TurnLeft()
+    r.TurnLeft()
+    r.TurnLeft()
+
+    if r.Direction() != "N" {
+        t.Fatalf("W+LLL should be N")
+    }
+
 }
 

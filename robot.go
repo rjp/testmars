@@ -15,6 +15,16 @@ func NewRobot(x int, y int, o string, w World) Robot {
     return temp
 }
 
+func NewRobotFromString(s string, w World) Robot {
+    var x, y int
+    var o string
+    n, err := fmt.Sscanf(s, "%d %d %s", &x, &y, &o)
+    if err != nil || n != 3 {
+        panic("Parsing robot definition string")
+    }
+    return NewRobot(x, y, o, w)
+}
+
 func (r Robot) Position() (x, y int) {
     return r.posX, r.posY
 }

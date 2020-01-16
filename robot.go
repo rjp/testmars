@@ -50,20 +50,26 @@ func (r Robot) TranslateOrientation() (dx, dy int) {
 // 3. IGNORED, scented cell
 // To which end we return two bools: lost, ignored
 func (r *Robot) Forward() (bool, bool) {
-    lost, ignored := false, false
+    ignored := false
 
+    // Work out our potential new position.
     dx, dy := r.TranslateOrientation()
-    // BUG: we update the position *before* checking if
-    // we're lost or should ignore this cell.
-    r.posX = r.posX + dx
-    r.posY = r.posY + dy
+    newX := r.posX + dx
+    newY := r.posY + dy
 
     // FIXED: BoundX, BoundY are the coords of the corner, not the count of cells
-    if r.posX < 0 || r.posY < 0 || r.posX > r.world.BoundX || r.posY > r.world.BoundY {
+    if newX < 0 || newY < 0 || newX > r.world.BoundX || newY > r.world.BoundY {
         // All robots get lost for now
-        lost = true
+        r.lost = true
     }
-    return lost, ignored
+
+    // If we didn't get lost, we can update our position.
+    if !r.lost {
+        r.posX = newX
+        r.posY = newY
+    }
+
+    return r.lost, ignored
 }
 
 // This is clunky but we're writing simple code.

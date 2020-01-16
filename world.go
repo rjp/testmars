@@ -1,5 +1,9 @@
 package main
 
+import (
+    "fmt"
+)
+
 const MaxX = 50
 const MaxY = 50
 
@@ -25,6 +29,15 @@ func NewWorld(x, y int) World {
         temp.Grid[i] = make(Cells, x+1)
     }
     return temp
+}
+
+func NewWorldFromString(s string) World {
+    var x, y int
+    n, err := fmt.Sscanf(s, "%d %d", &x, &y)
+    if err != nil || n != 2 {
+        panic("Parsing world definition string")
+    }
+    return NewWorld(x, y)
 }
 
 func (w World) HasScent(x, y int) bool {

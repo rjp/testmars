@@ -28,5 +28,5 @@ func NewWorld(x, y int) World {
 }
 
 func (w World) HasScent(x, y int) bool {
-    return w.Grid[y][x]
+    return w.Grid[y][x].Scent
 }

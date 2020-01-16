@@ -1,15 +1,17 @@
 package main
+import ("fmt")
 
 type Robot struct {
     posX, posY int
     orientation string
     world World
+    lost bool
 }
 
 // A Robot must have awareness of the World he's in.
 // Physical analogy would be, e.g., a paper map.
 func NewRobot(x int, y int, o string, w World) Robot {
-    temp := Robot{posX: x, posY: y, orientation: o, world: w}
+    temp := Robot{posX: x, posY: y, orientation: o, world: w, lost: false}
     return temp
 }
 
@@ -56,11 +58,11 @@ func (r *Robot) Forward() (bool, bool) {
     r.posX = r.posX + dx
     r.posY = r.posY + dy
 
-    if r.posX < 0 || r.posY < 0 || r.posX >= r.world.BoundX || r.posY >= r.world.BoundY {
+    // FIXED: BoundX, BoundY are the coords of the corner, not the count of cells
+    if r.posX < 0 || r.posY < 0 || r.posX > r.world.BoundX || r.posY > r.world.BoundY {
         // All robots get lost for now
         lost = true
     }
-
     return lost, ignored
 }
 
@@ -119,7 +121,6 @@ func (r *Robot) DoCommand(c string) (bool, bool) {
     return lost, ignored
 }
 
-func (r Robot) Commands(c string) bool {
 func (r *Robot) Commands(c string) bool {
     var lost bool
 
@@ -129,7 +130,10 @@ func (r *Robot) Commands(c string) bool {
         // If we get lost, abort the command stream.
         // We could just `return true` here but maybe
         // there's cleanup, etc., we want to do after.
-        if lost { break }
+        if lost {
+            r.lost = true
+            break
+        }
     }
 
     // Single return at the end can be cleaner code.
@@ -137,5 +141,11 @@ func (r *Robot) Commands(c string) bool {
 }
 
 func (r Robot) Report() string {
-    return fmt.Sprintf("%d %d %s", r.posX, r.posY, r.orientation)
+    var isLost string
+    // If the robot was lost, we need a trailing " LOST" on the output.
+    if r.lost {
+        isLost = " LOST"
+    }
+
+    return fmt.Sprintf("%d %d %s%s", r.posX, r.posY, r.orientation, isLost)
 }

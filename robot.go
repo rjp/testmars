@@ -120,6 +120,7 @@ func (r *Robot) DoCommand(c string) (bool, bool) {
 }
 
 func (r Robot) Commands(c string) bool {
+func (r *Robot) Commands(c string) bool {
     var lost bool
 
     for i:=0; i<len(c); i++ {

@@ -48,11 +48,14 @@ func (r Robot) TranslateOrientation() (dx, dy int) {
 // 3. IGNORED, scented cell
 // To which end we return two bools: lost, ignored
 func (r *Robot) Forward() (bool, bool) {
+    lost, ignored := false, false
+
     dx, dy := r.TranslateOrientation()
     r.posX = r.posX + dx
     r.posY = r.posY + dy
 
     return false, false
+    return lost, ignored
 }
 
 // This is clunky but we're writing simple code.

@@ -185,3 +185,20 @@ func TestCleanRobotTwoThree(t *testing.T) {
         t.Fatalf("Robot 3 failed to report '2 3 S'")
     }
 }
+
+func TestStrings(t *testing.T) {
+    w := NewWorldFromString("5 3")
+    r := NewRobotFromString("1 1 E", w)
+    lost := r.Commands("RFRFRFRF")
+
+    if lost {
+        t.Fatalf("First robot does not get lost")
+    }
+
+    // Output should be "1 1 E"
+    end := r.Report()
+    if end != "1 1 E" {
+        t.Fatalf("First robot failed to provide '1 1 E'")
+    }
+}
+

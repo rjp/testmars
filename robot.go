@@ -51,6 +51,8 @@ func (r *Robot) Forward() (bool, bool) {
     lost, ignored := false, false
 
     dx, dy := r.TranslateOrientation()
+    // BUG: we update the position *before* checking if
+    // we're lost or should ignore this cell.
     r.posX = r.posX + dx
     r.posY = r.posY + dy
 
@@ -97,4 +99,38 @@ func (r Robot) Direction() string {
 func (r Robot) OnScentedCell() bool {
     x, y := r.Position()
     return r.world.HasScent(x, y)
+}
+
+func (r *Robot) DoCommand(c string) (bool, bool) {
+    var lost, ignored bool
+
+    switch c {
+    case "F":
+        lost, ignored = r.Forward()
+    case "L":
+        r.TurnLeft()
+    case "R":
+        r.TurnRight()
+    // Ignore unknown commands or consider them a failure?
+    default:
+        lost, ignored = true, true
+    }
+
+    return lost, ignored
+}
+
+func (r Robot) Commands(c string) bool {
+    var lost bool
+
+    for i:=0; i<len(c); i++ {
+        // We don't care about ignored commands yet.
+        lost, _ = r.DoCommand(c[i:i+1])
+        // If we get lost, abort the command stream.
+        // We could just `return true` here but maybe
+        // there's cleanup, etc., we want to do after.
+        if lost { break }
+    }
+
+    // Single return at the end can be cleaner code.
+    return lost
 }

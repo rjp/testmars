@@ -131,11 +131,9 @@ func TestCleanRobotOne(t *testing.T) {
         t.Fatalf("First robot does not get lost")
     }
 
-    px, py := r.Position()
-    d := r.Direction()
-
     // Output should be "1 1 E"
-    if px != 1 || py != 1 || d != "E" {
+    end := r.Report()
+    if end != "1 1 E" {
         t.Fatalf("First robot failed to provide '1 1 E'")
     }
 }
@@ -151,11 +149,44 @@ func TestCleanRobotTwo(t *testing.T) {
         t.Fatalf("Second robot does get lost")
     }
 
+    // Output should be "3 3 N LOST"
+    end := r.Report()
+    if end != "3 3 N LOST" {
+        t.Fatalf("Second robot failed to provide '3 3 N LOST': %s", end)
+
+    }
+}
+
+// Test Robots 2+3
+func TestCleanRobotTwoThree(t *testing.T) {
+    w := NewWorld(5, 3)
+    r := NewRobot(3, 2, "N", w)
+    lost := r.Commands("FRRFLLFFRRFLL")
+
+    if !lost {
+        t.Fatalf("Second robot does get lost")
+    }
+
     px, py := r.Position()
     d := r.Direction()
 
     // Output should be "3 3 N"
     if px != 3 || py != 3 || d != "N" {
         t.Fatalf("Second robot failed to provide '3 3 N'")
+    }
+
+    r = NewRobot(0, 3, "W", w)
+    lost = r.Commands("LLFFFLFLFL")
+
+    if lost {
+        t.Fatalf("Robot 3 does not get lost")
+    }
+
+    px, py = r.Position()
+    d = r.Direction()
+
+    // Expecting '2 3 S'
+    if px != 2 || py != 3 || d != "S" {
+        t.Fatalf("Robot 3 failed to report '2 3 S'")
     }
 }

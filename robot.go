@@ -18,9 +18,11 @@ func NewRobot(x int, y int, o string, w World) Robot {
 	return temp
 }
 
+// Create a robot from a string definition.
 func NewRobotFromString(s string, w World) Robot {
 	var x, y int
 	var o string
+	// See comments on `world.NewWorldFromString`
 	n, err := fmt.Sscanf(s, "%d %d %s", &x, &y, &o)
 	if err != nil || n != 3 {
 		panic("Parsing robot definition string")
@@ -28,6 +30,7 @@ func NewRobotFromString(s string, w World) Robot {
 	return NewRobot(x, y, o, w)
 }
 
+// Helper function
 func (r Robot) Position() (x, y int) {
 	return r.posX, r.posY
 }
@@ -37,24 +40,21 @@ func (r Robot) Position() (x, y int) {
 // a rotational matrix and combine that with a unit matrix to
 // calculate our new position. But this is a simple case and
 // we'll just use a switch for now.
-func (r Robot) TranslateOrientation() (dx, dy int) {
-	var nx, ny int
+func (r Robot) TranslateOrientation() (int, int) {
+	var dx, dy int
 
 	switch r.orientation {
 	case "N":
-		nx, ny = 0, 1
+		dx, dy = 0, 1
 	case "S":
-		nx, ny = 0, -1
+		dx, dy = 0, -1
 	case "E":
-		nx, ny = 1, 0
+		dx, dy = 1, 0
 	case "W":
-		nx, ny = -1, 0
+		dx, dy = -1, 0
 	}
 
-	// We could have used `dx, dy` in the body of this
-	// function instead of `nx, ny` with a bare `return`
-	// but that can be confusing and IMHO explicit is better.
-	return nx, ny
+	return dx, dy
 }
 
 // Moving forward can have different results:
@@ -80,6 +80,7 @@ func (r *Robot) Forward() (bool, bool) {
 			ignored = true
 		} else {
 			r.AddScent()
+			// Mark the robot as lost for reporting purposes.
 			r.lost = true
 		}
 	}
@@ -160,6 +161,8 @@ func (r *Robot) DoCommand(c string) (bool, bool) {
 	return lost, ignored
 }
 
+// Commands are a string of letters. Handle each one,
+// optionally aborting if the robot is lost as a result.
 func (r *Robot) Commands(c string) bool {
 	var lost bool
 
@@ -181,6 +184,7 @@ func (r *Robot) Commands(c string) bool {
 	return lost
 }
 
+// Stringify the robot's current state (position, orientation, lostness).
 func (r Robot) Report() string {
 	var isLost string
 	// If the robot was lost, we need a trailing " LOST" on the output.

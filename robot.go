@@ -119,11 +119,15 @@ func (r Robot) AddScent() {
     r.world.AddScent(x, y)
 }
 
+// Check whether a cell is scented to avert disaster.
 func (r Robot) OnScentedCell() bool {
     x, y := r.Position()
     return r.world.HasScent(x, y)
 }
 
+// Process a single command and return the outcome.
+// We don't actually need to return `ignored` here
+// because we never use it.
 func (r *Robot) DoCommand(c string) (bool, bool) {
     var lost, ignored bool
 
@@ -135,6 +139,7 @@ func (r *Robot) DoCommand(c string) (bool, bool) {
     case "R":
         r.TurnRight()
     // Ignore unknown commands or consider them a failure?
+    // For now, let's consider them a lost robot (brain freeze.)
     default:
         lost, ignored = true, true
     }
@@ -146,8 +151,10 @@ func (r *Robot) Commands(c string) bool {
     var lost bool
 
     for i:=0; i<len(c); i++ {
-        // We don't care about ignored commands yet.
+        // We don't care about ignored commands
+        // because they don't interrupt the stream.
         lost, _ = r.DoCommand(c[i:i+1])
+
         // If we get lost, abort the command stream.
         // We could just `return true` here but maybe
         // there's cleanup, etc., we want to do after.

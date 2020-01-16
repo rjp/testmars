@@ -121,3 +121,41 @@ func TestSampleData(t *testing.T) {
         t.Fatalf("First robot failed to provide '1 1 E'")
     }
 }
+
+func TestCleanRobotOne(t *testing.T) {
+    w := NewWorld(5, 3)
+    r := NewRobot(1, 1, "E", w)
+    lost := r.Commands("RFRFRFRF")
+
+    if lost {
+        t.Fatalf("First robot does not get lost")
+    }
+
+    px, py := r.Position()
+    d := r.Direction()
+
+    // Output should be "1 1 E"
+    if px != 1 || py != 1 || d != "E" {
+        t.Fatalf("First robot failed to provide '1 1 E'")
+    }
+}
+
+// Since Robot One doesn't get lost, we can check Robot Two
+// without having to run Robot One first.
+func TestCleanRobotTwo(t *testing.T) {
+    w := NewWorld(5, 3)
+    r := NewRobot(3, 2, "N", w)
+    lost := r.Commands("FRRFLLFFRRFLL")
+
+    if !lost {
+        t.Fatalf("Second robot does get lost")
+    }
+
+    px, py := r.Position()
+    d := r.Direction()
+
+    // Output should be "3 3 N"
+    if px != 3 || py != 3 || d != "N" {
+        t.Fatalf("Second robot failed to provide '3 3 N'")
+    }
+}

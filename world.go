@@ -30,3 +30,7 @@ func NewWorld(x, y int) World {
 func (w World) HasScent(x, y int) bool {
     return w.Grid[y][x].Scent
 }
+
+func (w *World) AddScent(x, y int) {
+    w.Grid[y][x].Scent = true
+}

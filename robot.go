@@ -42,10 +42,17 @@ func (r Robot) TranslateOrientation() (dx, dy int) {
     return nx, ny
 }
 
-func (r *Robot) Forward() {
+// Moving forward can have different results:
+// 1. YES, moved forward ok
+// 2. LOST, fell off the edge of the map
+// 3. IGNORED, scented cell
+// To which end we return two bools: lost, ignored
+func (r *Robot) Forward() (bool, bool) {
     dx, dy := r.TranslateOrientation()
     r.posX = r.posX + dx
     r.posY = r.posY + dy
+
+    return false, false
 }
 
 func (r *Robot) TurnLeft() {

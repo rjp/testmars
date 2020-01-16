@@ -19,7 +19,11 @@ func TestNewRobot(t *testing.T) {
         t.Fatalf("All cells are unscented")
     }
 
-    r.Forward()
+    lost, ignored := r.Forward()
+
+    if lost || ignored {
+        t.Fatalf("Robot shouldn't get lost or ignore this")
+    }
 
     px, py = r.Position()
 
@@ -27,6 +31,5 @@ func TestNewRobot(t *testing.T) {
     if px != 1 || py != 2 {
         t.Fatalf("Move North")
     }
-
 }
 

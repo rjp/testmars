@@ -67,5 +67,27 @@ func TestNewRobot(t *testing.T) {
         t.Fatalf("N+LR should be N")
     }
 
-}
+    // Facing S now
+    r.TurnRight()
+    r.TurnRight()
 
+    lost, ignored = r.Forward()
+    if lost || ignored {
+        t.Fatalf("Robot shouldn't get lost or ignore yet")
+    }
+
+    px, py = r.Position()
+    if px != 1 || py != 1 {
+        t.Fatalf("1,1 + FRRF should be 1,1")
+    }
+
+    lost, ignored = r.Forward()
+    if lost || ignored {
+        t.Fatalf("Robot shouldn't get lost or ignore yet")
+    }
+
+    px, py = r.Position()
+    if px != 1 || py != 0 {
+        t.Fatalf("1,1 S + F should be 1,0")
+    }
+}

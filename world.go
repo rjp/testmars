@@ -20,9 +20,9 @@ type World struct {
 
 func NewWorld(x, y int) World {
     temp := World{BoundX: x, BoundY: y}
-    temp.Grid = make([]Cells, MaxY)
-    for i:=0; i<MaxY; i++ {
-        temp.Grid[i] = make(Cells, MaxX)
+    temp.Grid = make([]Cells, y+1)
+    for i:=0; i<y+1; i++ {
+        temp.Grid[i] = make(Cells, x+1)
     }
     return temp
 }

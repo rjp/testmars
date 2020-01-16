@@ -52,19 +52,28 @@ func (r Robot) TranslateOrientation() (dx, dy int) {
 func (r *Robot) Forward() (bool, bool) {
     ignored := false
 
-    // Work out our potential new position.
+    // Work out our potential new position. Since we want
+    // to drop scent if we get lost, we can't update our
+    // position before we check the new one.
     dx, dy := r.TranslateOrientation()
     newX := r.posX + dx
     newY := r.posY + dy
 
     // FIXED: BoundX, BoundY are the coords of the corner, not the count of cells
     if newX < 0 || newY < 0 || newX > r.world.BoundX || newY > r.world.BoundY {
-        // All robots get lost for now
-        r.lost = true
+        // Ignore movements that might cause us to be `LOST` iff
+        // we're standing on a scented cell.
+        if r.OnScentedCell() {
+            ignored = true
+        } else {
+            r.AddScent()
+            r.lost = true
+        }
     }
 
-    // If we didn't get lost, we can update our position.
-    if !r.lost {
+    // If we didn't get lost and we didn't ignore this command,
+    // we can update our position.
+    if !r.lost && !ignored {
         r.posX = newX
         r.posY = newY
     }

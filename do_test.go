@@ -46,5 +46,26 @@ func TestNewRobot(t *testing.T) {
         t.Fatalf("W+LLL should be N")
     }
 
+    r.TurnRight()
+
+    if r.Direction() != "E" {
+        t.Fatalf("N+R should be E")
+    }
+
+    r.TurnRight()
+    r.TurnRight()
+    r.TurnRight()
+
+    if r.Direction() != "N" {
+        t.Fatalf("E+RRR should be N")
+    }
+
+    r.TurnRight()
+    r.TurnLeft()
+
+    if r.Direction() != "N" {
+        t.Fatalf("N+LR should be N")
+    }
+
 }
 

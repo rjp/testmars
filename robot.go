@@ -3,6 +3,7 @@ package main
 type Robot struct {
     posX, posY int
     orientation string
+    world World
 }
 
 // A Robot must have awareness of the World he's in.
@@ -13,6 +14,9 @@ func NewRobot(x int, y int, o string, w World) Robot {
 }
 
 func (r *Robot) Forward {
+func (r Robot) Position() (x, y int) {
+    return r.posX, r.posY
+}
 }
 
 func (r *Robot) TurnLeft() {

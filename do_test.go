@@ -113,11 +113,10 @@ func TestSampleData(t *testing.T) {
     r.TurnRight()
     r.Forward()
 
-    px, py := r.Position()
-    d := r.Direction()
 
     // Output should be "1 1 E"
-    if px != 1 || py != 1 || d != "E" {
+    end := r.Report()
+    if end != "1 1 E" {
         t.Fatalf("First robot failed to provide '1 1 E'")
     }
 }
@@ -167,11 +166,9 @@ func TestCleanRobotTwoThree(t *testing.T) {
         t.Fatalf("Second robot does get lost")
     }
 
-    px, py := r.Position()
-    d := r.Direction()
-
-    // Output should be "3 3 N"
-    if px != 3 || py != 3 || d != "N" {
+    // Output should be "3 3 N LOST"
+    end := r.Report()
+    if end != "3 3 N LOST" {
         t.Fatalf("Second robot failed to provide '3 3 N'")
     }
 
@@ -182,11 +179,9 @@ func TestCleanRobotTwoThree(t *testing.T) {
         t.Fatalf("Robot 3 does not get lost")
     }
 
-    px, py = r.Position()
-    d = r.Direction()
-
     // Expecting '2 3 S'
-    if px != 2 || py != 3 || d != "S" {
+    end = r.Report()
+    if end != "2 3 S" {
         t.Fatalf("Robot 3 failed to report '2 3 S'")
     }
 }

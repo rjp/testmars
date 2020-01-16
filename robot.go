@@ -104,6 +104,12 @@ func (r Robot) Direction() string {
     return r.orientation
 }
 
+// Drop a spray of scent on a cell to mark disaster.
+func (r Robot) AddScent() {
+    x, y := r.Position()
+    r.world.AddScent(x, y)
+}
+
 func (r Robot) OnScentedCell() bool {
     x, y := r.Position()
     return r.world.HasScent(x, y)
